@@ -3,6 +3,7 @@ export enum METHODS {
   POST = "post",
   PUT = "put",
   DEL = "del",
+  PATCH = "patch",
   ALL = "all"
 };
 
