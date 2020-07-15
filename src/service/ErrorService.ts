@@ -4,7 +4,8 @@ import { getManager } from "typeorm";
 
 export default class ErrorService {
   static async saveError(data, events) {
-    const errorRepo = getManager().getRepository(ErrorEntity);
+    const errorRepository = getManager().getRepository(ErrorEntity);
+    const errorEventRepository = getManager().getRepository(ErrorEvent);
     
     let errorEntity = new ErrorEntity();
     
@@ -29,20 +30,25 @@ export default class ErrorService {
     errorEntity.lineno = data.lineno;
     errorEntity.colno = data.colno;
 
-    const errorEvent = getManager().getRepository(ErrorEvent);
-    events.forEach( async (item) => {
+    const errors = await errorRepository.save(errorEntity);
+    events.map( async (item) => {
       let event = new ErrorEvent();
       event.type = item.type;
       event.data = JSON.stringify(item.data);
       event.timestamp = JSON.stringify(item.timestamp);
-      await errorEvent.save(event);
-    });
-    const errors = await errorRepo.save(errorEntity);
+      // 建立关联表
+      event.parent = errorEntity;
+      await errorEventRepository.save(event);
+    })
     return errors;
   }
 
-  static async getError() {
+  static async getError(page, limit) {
     const errorRepository = getManager().getRepository(ErrorEntity);
-    return errorRepository.find();
+    return errorRepository.find({ 
+      relations: ['myEvents'],
+      take: limit,
+      skip: (page - 1) * limit
+    });
   }
 }

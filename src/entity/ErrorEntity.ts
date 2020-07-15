@@ -64,6 +64,7 @@ export class ErrorEntity {
   @Column()
   colno: number;
 
-  @OneToMany(type => ErrorEvent, event => event.user)
-  events: ErrorEvent[]
+  // 增加外键
+  @OneToMany(type => ErrorEvent, event => event.parent)
+  myEvents: ErrorEvent[]
 }

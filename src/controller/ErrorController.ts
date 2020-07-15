@@ -18,8 +18,8 @@ export default class ErrorController {
 
   @GET('/error/list')
   async getError(ctx) {
-    
-    const data = await ErrorService.getError();
+    const { page, limit } = ctx.query;
+    const data = await ErrorService.getError(page, limit);
     ctx.body = {
       code: '200',
       msg: '',

@@ -16,6 +16,7 @@ export class ErrorEvent {
   @Column()
   timestamp: string;
 
-  @ManyToOne(type => ErrorEntity, error => error.events)
-  user: ErrorEntity
+  // 关联外键
+  @ManyToOne(type => ErrorEntity, error => error.myEvents)
+  parent: ErrorEntity
 }
