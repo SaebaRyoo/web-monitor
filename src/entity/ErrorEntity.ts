@@ -1,4 +1,5 @@
-import {Entity, Column, PrimaryGeneratedColumn} from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from "typeorm";
+import { ErrorEvent } from './ErrorEvent';
 
 @Entity()
 export class ErrorEntity {
@@ -58,9 +59,11 @@ export class ErrorEntity {
   filename: string;
 
   @Column()
-  lineno: string;
+  lineno: number;
 
   @Column()
-  colno: string;
+  colno: number;
 
+  @OneToMany(type => ErrorEvent, event => event.user)
+  events: ErrorEvent[]
 }

@@ -1,11 +1,30 @@
 import ErrorService from '@src/service/ErrorService';
-import { GET } from '@src/utils/decorator';
+import { POST, GET } from '@src/utils/decorator';
 
 
-export default class HomeController {
+export default class ErrorController {
 
-  @GET('/error')
-  async hello(ctx) {
-    ctx.body = await ErrorService.hello(ctx.query.errorInfo);
+  @POST('/error')
+  async saveError(ctx) {
+    const data = JSON.parse(ctx.query.errorInfo);
+    const { events } = ctx.request.body;
+    const res = await ErrorService.saveError(data, events);
+    ctx.body = {
+      code: '200',
+      msg: '',
+      data: res
+    }
   }
+
+  @GET('/error/list')
+  async getError(ctx) {
+    
+    const data = await ErrorService.getError();
+    ctx.body = {
+      code: '200',
+      msg: '',
+      data: data
+    }
+  }
+
 }

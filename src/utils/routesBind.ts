@@ -15,8 +15,8 @@ export function bindRoutes(koaRouter: Router) {
 
     for(const item of pathMeta) {
       const { path, verb, name } = item;
-      koaRouter[verb](path, (ctx: Koa.Context) => {
-        instance[name](ctx);
+      koaRouter[verb](path, async (ctx: Koa.Context) => {
+        await instance[name](ctx);
       });
     }
   }

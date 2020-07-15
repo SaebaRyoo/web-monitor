@@ -19,7 +19,7 @@ createConnection({
   host: "localhost",
   port: 3306,
   username: "root",
-  password: "xxxxx",
+  password: "zqy19970114",
   database: "web-monitor",
   entities: [
     __dirname + "/entity/*.ts"

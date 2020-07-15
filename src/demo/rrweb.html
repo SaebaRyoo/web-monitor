@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/rrweb@latest/dist/rrweb.min.css"
+  />
+  <script src="https://cdn.jsdelivr.net/npm/rrweb@latest/dist/rrweb.min.js"></script>
+
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/rrweb@latest/dist/rrweb.min.css"
+  />
+  <style>
+    #replayRoot {
+      border: 1px sold #000000;
+      margin-top: 50px;
+    }
+  </style>
+</head>
+<body>
+    <h1>录制测试</h1>
+    <div>页面中一些内容</div>
+    <div class="rr-block">隐私：占位元素。</div>
+    <div class="rr-ignore">不绘制</div>
+    <div id="replayRoot"></div>
+    <button id="test">测试</button>
+    <button id="replay">replay</button>
+    <script>
+      var testBtn = document.getElementById('test');
+      var replayBtn = document.getElementById('replay');
+
+      testBtn.onclick= handleClick
+      replayBtn.onclick= replay
+
+      function handleClick() {
+        document.getElementsByTagName('h1')[0].style.background = '#cccccc'
+      }
+
+      let events = [];
+      rrweb.record({
+        emit(event) {
+          // 将 event 存入 events 数组中
+          events.push(event);
+        },
+      });
+
+      // save 函数用于将 events 发送至后端存入，并重置 events 数组
+      // function save() {
+      //   const body = JSON.stringify({ events });
+      //   events = [];
+      //   fetch('http://YOUR_BACKEND_API', {
+      //     method: 'POST',
+      //     headers: {
+      //       'Content-Type': 'application/json',
+      //     },
+      //     body,
+      //   });
+      // }
+
+      function replay() {
+        const replayer = new rrweb.Replayer(events, {
+          root: document.getElementById('replayRoot')
+        });
+        replayer.play();  
+      }
+    </script>
+</body>
+</html>
